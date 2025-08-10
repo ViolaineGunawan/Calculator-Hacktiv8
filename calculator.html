@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simple Calculator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex items-center justify-center min-h-screen bg-pink-200">
+  <!-- Calculator Container -->
+  <div class="bg-pink-300 rounded-2xl p-6 shadow-lg w-64">
+    <!-- Input Field -->
+    <div id="display" class="bg-gray-200 rounded-lg p-4 mb-6 text-right text-xl font-mono overflow-x-auto">
+      0
+    </div>
+    <!-- Keypad -->
+    <div class="grid grid-cols-3 gap-4">
+      <button class="bg-white text-black rounded-lg p-4 font-bold" onclick="appendNumber('1')">1</button>
+      <button class="bg-white text-black rounded-lg p-4 font-bold" onclick="appendNumber('2')">2</button>
+      <button class="bg-white text-black rounded-lg p-4 font-bold" onclick="appendNumber('3')">3</button>
+      <button class="bg-white text-black rounded-lg p-4 font-bold" onclick="appendNumber('4')">4</button>
+      <button class="bg-white text-black rounded-lg p-4 font-bold" onclick="appendNumber('5')">5</button>
+      <button class="bg-white text-black rounded-lg p-4 font-bold" onclick="appendNumber('6')">6</button>
+      <button class="bg-white text-black rounded-lg p-4 font-bold" onclick="appendNumber('7')">7</button>
+      <button class="bg-white text-black rounded-lg p-4 font-bold" onclick="appendNumber('8')">8</button>
+      <button class="bg-white text-black rounded-lg p-4 font-bold" onclick="appendNumber('9')">9</button>
+      <button class="bg-white text-black rounded-lg p-4 font-bold" onclick="appendNumber('0')">0</button>
+      <button class="bg-white text-black rounded-lg p-4 font-bold" onclick="appendOperator('+')">+</button>
+      <button class="bg-white text-black rounded-lg p-4 font-bold" onclick="appendOperator('-')">-</button>
+      <button class="bg-white text-black rounded-lg p-4 font-bold" onclick="appendOperator('*')">*</button>
+      <button class="bg-white text-black rounded-lg p-4 font-bold" onclick="appendOperator('/')">/</button>
+      <button class="bg-white text-black rounded-lg p-4 font-bold col-span-3" onclick="calculateResult()">=</button>
+    </div>
+  </div>
+
+  <script>
+    let currentInput = '';
+    let justCalculated = false;
+
+    function appendNumber(num) {
+      if (justCalculated) {
+        currentInput = '';
+        justCalculated = false;
+      }
+      currentInput += num;
+      updateDisplay();
+    }
+
+    function appendOperator(op) {
+      if (currentInput === '' || /[+\-*/]$/.test(currentInput)) return;
+      justCalculated = false;
+      currentInput += op;
+      updateDisplay();
+    }
+
+    function calculateResult() {
+      try {
+        let result = eval(currentInput);
+        if (typeof result === 'number' && !Number.isInteger(result)) {
+          result = result.toFixed(5);
+        }
+        currentInput = result.toString();
+        updateDisplay();
+        justCalculated = true;
+      } catch {
+        currentInput = 'Error';
+        updateDisplay();
+        justCalculated = true;
+      }
+    }
+
+    function updateDisplay() {
+      document.getElementById('display').textContent = currentInput || '0';
+    }
+  </script>
+</body>
+</html>
